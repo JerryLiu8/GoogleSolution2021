@@ -6,6 +6,7 @@ Google Solution Challenge 2021
 ### Setup Node.js
 Ensure you have the appropriate node_modules installed.
 ```
+npm install
 cd physiodash/
 npm run build
 ```
