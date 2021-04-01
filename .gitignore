@@ -157,3 +157,4 @@ dmypy.json
 # fitness_poses_csvs_out/
 # fitness_poses_images_in/
 # fitness_poses_images_out/
+.vscode/
