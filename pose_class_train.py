@@ -923,9 +923,9 @@ if __name__ == '__main__':
   #       image_002.jpg
   #       ...
   #     ...
-  bootstrap_images_in_folders = ['fitness_poses_images_in_pushups', 'fitness_poses_images_in_lunges']
-  bootstrap_images_out_folders = ['fitness_poses_images_out_pushups', 'fitness_poses_images_out_pushups']
-  bootstrap_csvs_out_folders = ['fitness_poses_csvs_out_pushups', 'fitness_poses_csvs_out_pushups']
+  bootstrap_images_in_folders = ['fitness_poses_images_in_pushups', 'fitness_poses_images_in_lunges', 'fitness_poses_images_in_squats']
+  bootstrap_images_out_folders = ['fitness_poses_images_out_pushups', 'fitness_poses_images_out_lunges','fitness_poses_images_out_squats']
+  bootstrap_csvs_out_folders = ['fitness_poses_csvs_out_pushups', 'fitness_poses_csvs_out_lunges', 'fitness_poses_csvs_out_squats']
 
   for bootstrap_images_in_folder, bootstrap_images_out_folder, bootstrap_csvs_out_folder in zip(bootstrap_images_in_folders, bootstrap_images_out_folders, bootstrap_csvs_out_folders):
 

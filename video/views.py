@@ -26,9 +26,12 @@ def upload(request):
 
 
 def results(request):
+    pushup_counts, lunge_counts, squat_counts = request.session.get('summary', '')
     if request.method == 'GET':
         data={
-            'wallPushups':request.session.get('summary', '')
+            'wallPushups':pushup_counts,
+            'lunges': lunge_counts,
+            'squats': squat_counts,
         }
         print(data)
         return JsonResponse(data)
