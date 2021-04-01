@@ -2,8 +2,9 @@ Django
 gunicorn
 django-heroku
 pillow==8.1.0
-numpy
+numpy==1.19.3
 opencv-python==4.5.1.48
 tqdm==4.56.0
 requests==2.25.1
 mediapipe==0.8.3
+ffmpeg-python

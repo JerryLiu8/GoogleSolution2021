@@ -1,6 +1,7 @@
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-import ffmpeg
+from django.http import JsonResponse
+
 from os import remove
 import pose_class_train
 from pose_classification import classify
@@ -8,30 +9,30 @@ from pose_classification import classify
 
 def convert_file(file):
     filename = f'tmp/{str(file)}'
-    mp4_filename = filename[:-4] + 'mp4'
     with open(f'tmp/{str(file)}', 'wb+') as f:
         for chunk in file.chunks():
             f.write(chunk)
 
-    ffmpeg.input(filename).output(mp4_filename).overwrite_output().run()
+    reps = classify(filename)
     remove(filename)
-    # do machine learning stuff
-    reps = classify(mp4_filename)
-    remove(mp4_filename)
     return reps
 
 
 @csrf_exempt
 def upload(request):
     if request.method == 'POST':
-        # print(request.POST)
-        # print(request.FILES)
-        # print(request.FILES['video'])
-        # print(dir(request.FILES['video']))
-
         request.session['summary'] = convert_file(request.FILES['video'])
 
-    return HttpResponseRedirect('')
+    return HttpResponse(status=200)
+
+
+def results(request):
+    if request.method == 'GET':
+        data={
+            'wallPushups':request.session.get('summary', '')
+        }
+        print(data)
+        return JsonResponse(data)
 
 
 def summary_page(request):
