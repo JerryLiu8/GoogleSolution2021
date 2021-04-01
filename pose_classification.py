@@ -7,7 +7,7 @@ from mediapipe.python.solutions import pose as mp_pose
 import tqdm
 import cv2
 from mediapipe.python.solutions import drawing_utils as mp_drawing
-from pose_class_train import FullBodyPoseEmbedder, PoseClassifier, EMADictSmoothing, RepetitionCounter, PoseClassificationVisualizer, show_image
+from pose_class_train import FullBodyPoseEmbedder, PoseClassifier, EMADictSmoothing, RepetitionCounter
 
 # Upload your video.
 # uploaded = files.upload()
@@ -18,7 +18,7 @@ def classify(filename):
 
     # Specify your video name and target pose class to count the repetitions.
     video_path = filename
-    class_name = 'pushups_up'
+    class_name = 'pushups_down'
     # out_video_path = f'{filename[:-3]}mov'
 
     # Open the video.
@@ -37,7 +37,7 @@ def classify(filename):
 
     # Folder with pose class CSVs. That should be the same folder you using while
     # building classifier to output CSVs.
-    pose_samples_folder = 'fitness_poses_csvs_out'
+    pose_samples_folder = 'fitness_poses_csvs_out_pushups'
 
     # Initialize tracker.
     pose_tracker = mp_pose.Pose(upper_body_only=False)
@@ -84,6 +84,7 @@ def classify(filename):
     # out_video = cv2.VideoWriter(out_video_path, cv2.VideoWriter_fourcc(*'mp4v'), video_fps, (video_width, video_height))
 
     frame_idx = 0
+    repetitions_count = -1
     # output_frame = None
     with tqdm.tqdm(total=video_n_frames, position=0, leave=True) as pbar:
       while True:
@@ -155,6 +156,7 @@ def classify(filename):
 
     # Release MediaPipe resources.
     pose_tracker.close()
+    print(repetitions_count)
     return repetitions_count
 
     # Show the last frame of the video.

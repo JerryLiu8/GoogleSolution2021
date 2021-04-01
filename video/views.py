@@ -3,7 +3,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 from os import remove
-import pose_class_train
 from pose_classification import classify
 
 

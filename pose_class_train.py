@@ -37,10 +37,11 @@ print(python_version())
 
 
 def show_image(img, figsize=(10, 10)):
+  pass
   """Shows output PIL image."""
-  plt.figure(figsize=figsize)
-  plt.imshow(img)
-  plt.show()
+  # plt.figure(figsize=figsize)
+  # plt.imshow(img)
+  # plt.show()
 
 """## Pose embedding"""
 
@@ -611,48 +612,47 @@ class PoseClassificationVisualizer(object):
     return output_img
 
   def _plot_classification_history(self, output_width, output_height):
-    fig = plt.figure(figsize=self._plot_figsize)
-
-    for classification_history in [self._pose_classification_history,
-                                   self._pose_classification_filtered_history]:
-      y = []
-      for classification in classification_history:
-        if classification is None:
-          y.append(None)
-        elif self._class_name in classification:
-          y.append(classification[self._class_name])
-        else:
-          y.append(0)
-      plt.plot(y, linewidth=7)
-
-    plt.grid(axis='y', alpha=0.75)
-    plt.xlabel('Frame')
-    plt.ylabel('Confidence')
-    plt.title('Classification history for `{}`'.format(self._class_name))
-    plt.legend(loc='upper right')
-
-    if self._plot_y_max is not None:
-      plt.ylim(top=self._plot_y_max)
-    if self._plot_x_max is not None:
-      plt.xlim(right=self._plot_x_max)
-
-    # Convert plot to image.
-    buf = io.BytesIO()
-    dpi = min(
-        output_width * self._plot_max_width / float(self._plot_figsize[0]),
-        output_height * self._plot_max_height / float(self._plot_figsize[1]))
-    fig.savefig(buf, dpi=dpi)
-    buf.seek(0)
-    img = Image.open(buf)
-    plt.close()
-
-    return img
+    pass
+    # fig = plt.figure(figsize=self._plot_figsize)
+    #
+    # for classification_history in [self._pose_classification_history,
+    #                                self._pose_classification_filtered_history]:
+    #   y = []
+    #   for classification in classification_history:
+    #     if classification is None:
+    #       y.append(None)
+    #     elif self._class_name in classification:
+    #       y.append(classification[self._class_name])
+    #     else:
+    #       y.append(0)
+    #   plt.plot(y, linewidth=7)
+    #
+    # plt.grid(axis='y', alpha=0.75)
+    # plt.xlabel('Frame')
+    # plt.ylabel('Confidence')
+    # plt.title('Classification history for `{}`'.format(self._class_name))
+    # plt.legend(loc='upper right')
+    #
+    # if self._plot_y_max is not None:
+    #   plt.ylim(top=self._plot_y_max)
+    # if self._plot_x_max is not None:
+    #   plt.xlim(right=self._plot_x_max)
+    #
+    # # Convert plot to image.
+    # buf = io.BytesIO()
+    # dpi = min(
+    #     output_width * self._plot_max_width / float(self._plot_figsize[0]),
+    #     output_height * self._plot_max_height / float(self._plot_figsize[1]))
+    # fig.savefig(buf, dpi=dpi)
+    # buf.seek(0)
+    # img = Image.open(buf)
+    # plt.close()
+    #
+    # return img
 
 """## Bootstrap helper"""
 
 import cv2
-import numpy as np
-import os
 from PIL import Image
 import sys
 import tqdm
@@ -748,7 +748,7 @@ class BootstrapHelper(object):
                  for lmk in pose_landmarks.landmark],
                 dtype=np.float32)
             assert pose_landmarks.shape == (33, 3), 'Unexpected landmarks shape: {}'.format(pose_landmarks.shape)
-            csv_out_writer.writerow([image_name] + pose_landmarks.flatten().astype(np.str).tolist())
+            csv_out_writer.writerow([image_name] + pose_landmarks.flatten().astype(str).tolist())
 
           # Draw XZ projection and concatenate with the image.
           projection_xz = self._draw_xz_projection(
@@ -858,183 +858,152 @@ class BootstrapHelper(object):
           if not n.startswith('.')])
       print('  {}: {}'.format(pose_class_name, n_images))
 
-"""# Step 1: Build classifier
+if __name__ == '__main__':
 
-## Upload image samples
-
-Locally create a folder named `fitness_poses_images_in` with image samples.
-
-Images should repesent terminal states of desired pose classes. I.e. if you want to classify push-up provide iamges for two classes: when person is up, and when person is down.
-
-There should be about a few hundred samples per class covering different camera angles, environment conditions, body shapes, and exercise variations to build a good classifier.
-
-Required structure of the images_in_folder:
-```
-fitness_poses_images_in/
-  pushups_up/
-    image_001.jpg
-    image_002.jpg
+  """# Step 1: Build classifier
+  
+  ## Upload image samples
+  
+  Locally create a folder named `fitness_poses_images_in` with image samples.
+  
+  Images should repesent terminal states of desired pose classes. I.e. if you want to classify push-up provide iamges for two classes: when person is up, and when person is down.
+  
+  There should be about a few hundred samples per class covering different camera angles, environment conditions, body shapes, and exercise variations to build a good classifier.
+  
+  Required structure of the images_in_folder:
+  ```
+  fitness_poses_images_in/
+    pushups_up/
+      image_001.jpg
+      image_002.jpg
+      ...
+    pushups_down/
+      image_001.jpg
+      image_002.jpg
+      ...
     ...
-  pushups_down/
-    image_001.jpg
-    image_002.jpg
-    ...
-  ...
-```
+  ```
+  
+  Zip the `fitness_poses_images_in` folder:
+  ```
+  zip -r fitness_poses_images_in.zip fitness_poses_images_in
+  ```
+  
+  And run the code below to upload it to the Colab runtime
+  """
 
-Zip the `fitness_poses_images_in` folder:
-```
-zip -r fitness_poses_images_in.zip fitness_poses_images_in
-```
+  #from google.colab import files
+  import os
 
-And run the code below to upload it to the Colab runtime
-"""
+  #uploaded = files.upload()
+  os.listdir('.')
 
-#from google.colab import files
-import os
+  """Unzip the archive:"""
 
-#uploaded = files.upload()
-os.listdir('.')
+  # import zipfile
+  import io
 
-"""Unzip the archive:"""
+  # zf = zipfile.ZipFile("fitness_poses_images_in.zip", "r")
+  # print(type(zf))
+  # #zf = zipfile.ZipFile(io.BytesIO(z), "r")
+  # zf.extractall()
+  # os.listdir('.')
 
-# import zipfile
-import io
+  """## Bootstrap images"""
 
-# zf = zipfile.ZipFile("fitness_poses_images_in.zip", "r")
-# print(type(zf))
-# #zf = zipfile.ZipFile(io.BytesIO(z), "r")
-# zf.extractall()
-# os.listdir('.')
+  # Required structure of the images_in_folder:
+  #
+  #   fitness_poses_images_in/
+  #     pushups_up/
+  #       image_001.jpg
+  #       image_002.jpg
+  #       ...
+  #     pushups_down/
+  #       image_001.jpg
+  #       image_002.jpg
+  #       ...
+  #     ...
+  bootstrap_images_in_folders = ['fitness_poses_images_in_pushups', 'fitness_poses_images_in_lunges']
+  bootstrap_images_out_folders = ['fitness_poses_images_out_pushups', 'fitness_poses_images_out_pushups']
+  bootstrap_csvs_out_folders = ['fitness_poses_csvs_out_pushups', 'fitness_poses_csvs_out_pushups']
 
-"""## Bootstrap images"""
+  for bootstrap_images_in_folder, bootstrap_images_out_folder, bootstrap_csvs_out_folder in zip(bootstrap_images_in_folders, bootstrap_images_out_folders, bootstrap_csvs_out_folders):
 
-# Required structure of the images_in_folder:
-#
-#   fitness_poses_images_in/
-#     pushups_up/
-#       image_001.jpg
-#       image_002.jpg
-#       ...
-#     pushups_down/
-#       image_001.jpg
-#       image_002.jpg
-#       ...
-#     ...
-bootstrap_images_in_folder = 'fitness_poses_images_in'
+    # bootstrap_images_in_folder = 'fitness_poses_images_in'
 
-# Output folders for bootstrapped images and CSVs.
-bootstrap_images_out_folder = 'fitness_poses_images_out'
-bootstrap_csvs_out_folder = 'fitness_poses_csvs_out'
+    # # Output folders for bootstrapped images and CSVs.
+    # bootstrap_images_out_folder = 'fitness_poses_images_out'
+    # bootstrap_csvs_out_folder = 'fitness_poses_csvs_out'
 
-# Initialize helper.
-bootstrap_helper = BootstrapHelper(
-    images_in_folder=bootstrap_images_in_folder,
-    images_out_folder=bootstrap_images_out_folder,
-    csvs_out_folder=bootstrap_csvs_out_folder,
-)
+    # Initialize helper.
+    bootstrap_helper = BootstrapHelper(
+        images_in_folder=bootstrap_images_in_folder,
+        images_out_folder=bootstrap_images_out_folder,
+        csvs_out_folder=bootstrap_csvs_out_folder,
+    )
 
-# Check how many pose classes and images for them are available.
-bootstrap_helper.print_images_in_statistics()
+    # Check how many pose classes and images for them are available.
+    bootstrap_helper.print_images_in_statistics()
 
-# Bootstrap all images.
-# Set limit to some small number for debug.
-bootstrap_helper.bootstrap(per_pose_class_limit=None)
+    # Bootstrap all images.
+    # Set limit to some small number for debug.
+    bootstrap_helper.bootstrap(per_pose_class_limit=None)
 
-# Check how many images were bootstrapped.
-bootstrap_helper.print_images_out_statistics()
+    # Check how many images were bootstrapped.
+    bootstrap_helper.print_images_out_statistics()
 
-# After initial bootstrapping images without detected poses were still saved in
-# the folderd (but not in the CSVs) for debug purpose. Let's remove them.
-bootstrap_helper.align_images_and_csvs(print_removed_items=False)
-bootstrap_helper.print_images_out_statistics()
+    # After initial bootstrapping images without detected poses were still saved in
+    # the folderd (but not in the CSVs) for debug purpose. Let's remove them.
+    bootstrap_helper.align_images_and_csvs(print_removed_items=False)
+    bootstrap_helper.print_images_out_statistics()
 
-"""## Manual filtration
+    """## Manual filtration
+    
+    Please manually verify predictions and remove samples (images) that has wrong pose prediction. Check as if you were asked to classify pose just from predicted landmarks. If you can't - remove it.
+    
+    Align CSVs and image folders once you are done.
+    """
 
-Please manually verify predictions and remove samples (images) that has wrong pose prediction. Check as if you were asked to classify pose just from predicted landmarks. If you can't - remove it.
+    # Align CSVs with filtered images.
+    bootstrap_helper.align_images_and_csvs(print_removed_items=False)
+    bootstrap_helper.print_images_out_statistics()
 
-Align CSVs and image folders once you are done.
-"""
+    """## Automatic filtration
+    
+    Classify each sample against database of all other samples and check if it gets in the same class as annotated after classification.
+    
+    There can be two reasons for the outliers:
+    
+      * **Wrong pose prediction**: In this case remove such outliers.
+    
+      * **Wrong classification** (i.e. pose is predicted correctly and you aggree with original pose class assigned to the sample): In this case sample is from the underrepresented group (e.g. unusual angle or just very few samples). Add more similar samples and run bootstrapping from the very beginning.
+    
+    Even if you just removed some samples it makes sence to re-run automatic filtration one more time as database of poses has changed.
+    
+    **Important!!** Check that you are using the same parameters when classifying whole videos later.
+    """
 
-# Align CSVs with filtered images.
-bootstrap_helper.align_images_and_csvs(print_removed_items=False)
-bootstrap_helper.print_images_out_statistics()
+    # Find outliers.
 
-"""## Automatic filtration
+    # Transforms pose landmarks into embedding.
+    pose_embedder = FullBodyPoseEmbedder()
 
-Classify each sample against database of all other samples and check if it gets in the same class as annotated after classification.
+    # Classifies give pose against database of poses.
+    pose_classifier = PoseClassifier(
+        pose_samples_folder=bootstrap_csvs_out_folder,
+        pose_embedder=pose_embedder,
+        top_n_by_max_distance=30,
+        top_n_by_mean_distance=10)
 
-There can be two reasons for the outliers:
+    outliers = pose_classifier.find_pose_sample_outliers()
+    print('Number of outliers: ', len(outliers))
 
-  * **Wrong pose prediction**: In this case remove such outliers.
+    # Analyze outliers.
+    # bootstrap_helper.analyze_outliers(outliers)
 
-  * **Wrong classification** (i.e. pose is predicted correctly and you aggree with original pose class assigned to the sample): In this case sample is from the underrepresented group (e.g. unusual angle or just very few samples). Add more similar samples and run bootstrapping from the very beginning.
+    # Remove all outliers (if you don't want to manually pick).
+    bootstrap_helper.remove_outliers(outliers)
 
-Even if you just removed some samples it makes sence to re-run automatic filtration one more time as database of poses has changed.
-
-**Important!!** Check that you are using the same parameters when classifying whole videos later.
-"""
-
-# Find outliers.
-
-# Transforms pose landmarks into embedding.
-pose_embedder = FullBodyPoseEmbedder()
-
-# Classifies give pose against database of poses.
-pose_classifier = PoseClassifier(
-    pose_samples_folder=bootstrap_csvs_out_folder,
-    pose_embedder=pose_embedder,
-    top_n_by_max_distance=30,
-    top_n_by_mean_distance=10)
-
-outliers = pose_classifier.find_pose_sample_outliers()
-print('Number of outliers: ', len(outliers))
-
-# Analyze outliers.
-# bootstrap_helper.analyze_outliers(outliers)
-
-# Remove all outliers (if you don't want to manually pick).
-bootstrap_helper.remove_outliers(outliers)
-
-# Align CSVs with images after removing outliers.
-bootstrap_helper.align_images_and_csvs(print_removed_items=False)
-bootstrap_helper.print_images_out_statistics()
-
-"""## Dump for the App
-
-Dump filtered poses to CSV and download it.
-
-Please check this [guide](https://developers.google.com/ml-kit/vision/pose-detection/classifying-poses#4_integrate_with_the_ml_kit_quickstart_app) on how to use this CSV in the ML Kit sample app.
-"""
-
-# import csv
-# import os
-# import numpy as np
-#
-#
-# def dump_for_the_app():
-#   pose_samples_folder = 'fitness_poses_csvs_out'
-#   pose_samples_csv_path = 'fitness_poses_csvs_out.csv'
-#   file_extension = 'csv'
-#   file_separator = ','
-#
-#   # Each file in the folder represents one pose class.
-#   file_names = [name for name in os.listdir(pose_samples_folder) if name.endswith(file_extension)]
-#
-#   with open(pose_samples_csv_path, 'w') as csv_out:
-#     csv_out_writer = csv.writer(csv_out, delimiter=file_separator, quoting=csv.QUOTE_MINIMAL)
-#     for file_name in file_names:
-#       # Use file name as pose class name.
-#       class_name = file_name[:-(len(file_extension) + 1)]
-#
-#       # One file line: `sample_00001,x1,y1,x2,y2,....`.
-#       with open(os.path.join(pose_samples_folder, file_name)) as csv_in:
-#         csv_in_reader = csv.reader(csv_in, delimiter=file_separator)
-#         for row in csv_in_reader:
-#           row.insert(1, class_name)
-#           csv_out_writer.writerow(row)
-#
-#   files.download(pose_samples_csv_path)
-#
-#
-# dump_for_the_app()
+    # Align CSVs with images after removing outliers.
+    bootstrap_helper.align_images_and_csvs(print_removed_items=False)
+    bootstrap_helper.print_images_out_statistics()
