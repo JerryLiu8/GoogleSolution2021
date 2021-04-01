@@ -150,3 +150,10 @@ dmypy.json
 .prof
 
 # End of https://www.toptal.com/developers/gitignore/api/django
+
+.idea/
+
+tmp/
+fitness_poses_csvs_out/
+fitness_poses_images_in/
+fitness_poses_images_out/

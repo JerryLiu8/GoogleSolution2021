@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PhysioDash</title>
+</head>
+<body>
+<input id="video-file" type="file" />
+
+
+<input type="button" value="Upload" onclick="upload();">
+
+</body>
+<script>
+    function upload() {
+        let video = document.getElementById("video-file").files[0];
+        let formData = new FormData();
+
+        formData.append("video", video);
+        fetch('upload/', {method: "POST", body: formData});
+    }
+</script>
+</html>
