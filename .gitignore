@@ -153,7 +153,7 @@ dmypy.json
 
 .idea/
 
-tmp/
-fitness_poses_csvs_out/
-fitness_poses_images_in/
-fitness_poses_images_out/
+# tmp/
+# fitness_poses_csvs_out/
+# fitness_poses_images_in/
+# fitness_poses_images_out/
