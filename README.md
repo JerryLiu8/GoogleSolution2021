@@ -3,7 +3,7 @@ Google Solution Challenge 2021
 
 Check out the demo [video](https://youtu.be/sJjPFmnNey0)!
 
-Check out the webapp https://google-solution.herokuapp.com/physiodash !
+Check out the [webapp](https://google-solution.herokuapp.com/physiodash)!
 
 ## To Run Locally:
 
