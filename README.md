@@ -3,7 +3,9 @@ Google Solution Challenge 2021
 
 Check out the demo [video](https://youtu.be/sJjPFmnNey0)!
 
-## To Run:
+Check out the webapp https://google-solution.herokuapp.com/physiodash !
+
+## To Run Locally:
 
 ### Setup Node.js
 Ensure you have the appropriate node_modules installed.
